@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+import 
 
 class Sender(commands.Cog):
   
@@ -26,8 +27,24 @@ class Sender(commands.Cog):
           await ctx.send(atc.url)
           
   @commands.command()
-  async def send(ctg_id:int,
-         
+  async def send(self,ctx,ctg_id:int):
+    #カテゴリの取得
+    ctg = ctx.guild.get_channel(ctg_id)
+    if ctg == None:
+      await ctx.send('カテゴリの取得に失敗しました')
+      return
+    elif ctg.type == discord.ChannelType.category:
+      embed = discord.Embed(title='送信オプションの確認',description='メンション確認',colour=discord.Colour.blue())
+      embed.add_field(name='everyoneメンションする',value='\u2705',inline=false)
+      embed.add_field(name='everyoneメンションしない',value='\u26D4',inline=false)
+      mention_msg = await ctx.send(embed=embed)
+      
+      def check(reaction,user):
+        return user==ctx.author and reaction.message==mention_msg
+      
+      try:
+        
+      reaction,user = self.bot.wait_for(
          
       
       
