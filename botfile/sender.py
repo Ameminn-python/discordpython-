@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-import 
+import asyncio
 
 class Sender(commands.Cog):
   
@@ -68,8 +68,23 @@ class Sender(commands.Cog):
       try:
         m = await self.bot.wait_for('message',timeout=60,check=msgcheck)
       except asyncio.TimeoutError:
-        await ctx.send('60秒間無操作だったため操作を中止しました'
+        await ctx.send('60秒間無操作だったため操作を中止しました')
+        return
       else:
+        send_content = m.content
+        
+    if do_mention == True:
+      everyone = ctx.guild.get_role(ctx.guild.id)
+      send_message = everyone.mention + "\n" + send_content
+    else:
+      send_message = send_content
+    
+    for ch in ctg.text_channels:
+      await ch.send(send_message)
+      
+    
+def setup(bot):
+  bot.add_command(Sender(bot))
                        
          
       
