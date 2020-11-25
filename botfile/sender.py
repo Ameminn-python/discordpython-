@@ -68,7 +68,9 @@ class Sender(commands.Cog):
       try:
         m = await self.bot.wait_for('message',timeout=60,check=msgcheck)
       except asyncio.TimeoutError:
-        
+        await ctx.send('60秒間無操作だったため操作を中止しました'
+      else:
+                       
          
       
       
