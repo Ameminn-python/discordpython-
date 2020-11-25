@@ -33,18 +33,42 @@ class Sender(commands.Cog):
     if ctg == None:
       await ctx.send('カテゴリの取得に失敗しました')
       return
+    elif ctg.type != discord.ChannelType.category:
+      await ctx.send('カテゴリIDを指定してください')
+      return
     elif ctg.type == discord.ChannelType.category:
       embed = discord.Embed(title='送信オプションの確認',description='メンション確認',colour=discord.Colour.blue())
-      embed.add_field(name='everyoneメンションする',value='\u2705',inline=false)
-      embed.add_field(name='everyoneメンションしない',value='\u26D4',inline=false)
+      embed.add_field(name='everyoneメンションする',value='\u2705',inline=False)
+      embed.add_field(name='everyoneメンションしない',value='\u274E',inline=False)
       mention_msg = await ctx.send(embed=embed)
+      await mention_msg.add_reaction('\u2705')
+      await mention_msg.add_reaction('\u274E')
+      await mention_msg.add_reaction('\u26D4')
       
       def check(reaction,user):
         return user==ctx.author and reaction.message==mention_msg
       
       try:
+        reaction,user = await self.bot.wait_for('reaction_add',timeout=60,check=check)
+      except asyncio.TimeoutError:
+        await ctx.send('60秒間無操作だったため操作を中止しました。')
+      else:
+        if str(reaction.emoji) == '\u2705':
+          do_mention = True
+        elif str(reaction.emoji) == '\u274E':
+          do_mention = False
+        elif str(reaction.emoji) == '\u26D4':
+          await ctx.send('終了しました')
+          return
+      type_msg = await ctx.send('送信メッセージをこのチャンネルに送信してください。')
+      
+      def msgcheck(m):
+        return m.author == ctx.author and m.channnel == ctx.channel
+      
+      try:
+        m = await self.bot.wait_for('message',timeout=60,check=msgcheck)
+      except asyncio.TimeoutError:
         
-      reaction,user = self.bot.wait_for(
          
       
       
