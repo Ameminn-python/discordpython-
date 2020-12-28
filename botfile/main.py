@@ -33,7 +33,19 @@ async def reload(ctx,md):
     bot.reload_extension(md)
     await ctx.send('succsess')
     
-  
+    
+@bot.command()
+async def unload(ctx,module:str):
+    try:
+        bot.unload_extension(module)
+    except Extension as e:
+        await ctx.message.add_reaction('\U0001f196')  #Unicode 後から追加
+        message = f'```\n{e}\n```'
+        await ctx.send(message)
+    else:
+        awiat ctx.send('Cogのアンロードに成功しました。')
+
+    
 
 bot.load_extension('eval')
 
