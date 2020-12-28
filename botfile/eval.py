@@ -11,6 +11,7 @@ import os
 import re
 import sys
 import copy
+import math
 
 import discord
 from discord.ext import commands
